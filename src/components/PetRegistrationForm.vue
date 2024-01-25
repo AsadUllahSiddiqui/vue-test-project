@@ -93,6 +93,7 @@
           type="text"
           class="form-control"
           id="selectedBreeds"
+          placeholder="Breed1,Breed2...."
           v-model="pet.breeds"
         />
       </div>
