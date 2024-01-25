@@ -1,15 +1,17 @@
 <template>
-  
-  <PetRegistrationForm msg="Welcome to Your Vue.js App" />
+  <!-- <HeaderComp /> -->
+  <PetRegistrationForm />
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 import PetRegistrationForm from "./components/PetRegistrationForm.vue";
+// import HeaderComp from "./components/Header.vue";
 
 export default {
   name: "App",
   components: {
+    // HeaderComp,
     PetRegistrationForm,
   },
 };
@@ -21,7 +23,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #e0dfdf;
 }
 </style>
