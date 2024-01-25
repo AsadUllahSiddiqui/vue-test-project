@@ -1,7 +1,7 @@
 <template>
   <div class="text-start pet-registration container my-5 card">
-    <img src="../assets/paws.png" class="mb-3">
-    <h4 class="mb-4 default-color">Tell us about your pet</h4>
+    <img src="../assets/paws.png" class="mb-3" />
+    <h4 class="mb-4 text-default">Tell us about your pet</h4>
     <form @submit.prevent="submitForm">
       <div class="mb-3">
         <label for="petName" class="form-label">What is your pet's name?</label>
@@ -126,7 +126,7 @@
 
       <!-- Submission button -->
       <div class="d-grid">
-        <button type="submit" class="btn btn-primary">Continue</button>
+        <button type="submit" class="btn btn-primary">Save</button>
       </div>
     </form>
   </div>
@@ -141,38 +141,53 @@ export default {
         type: "",
         breedChoice: "",
         gender: "",
-        breed: [],
+        breeds: [],
         showBreedInput: false,
       },
-      catBreeds: ["Cat 1", "Cat 2", "Cat 3", "Cat 4", "Cat 5", "Cat 6", "Can't find it?"],
-      dogBreeds: ["Dog 1", "Dog 2", "Dog 3", "Dog 4", "Dog 5", "Dog 6", "Can't find it?"]
+      catBreeds: [
+        "Cat 1",
+        "Cat 2",
+        "Cat 3",
+        "Cat 4",
+        "Cat 5",
+        "Cat 6",
+        "Can't find it?",
+      ],
+      dogBreeds: [
+        "Dog 1",
+        "Dog 2",
+        "Dog 3",
+        "Dog 4",
+        "Dog 5",
+        "Dog 6",
+        "Can't find it?",
+      ],
     };
   },
   computed: {
-    breads(){
-      return this.pet.type === 'dog' ? this.dogBreeds : this.catBreeds
+    breads() {
+      return this.pet.type === "dog" ? this.dogBreeds : this.catBreeds;
     },
-    unknownBreed(){
-      return this.pet.breed === "Can't find it?"
+    unknownBreed() {
+      return this.pet.breed === "Can't find it?";
     },
-    mixBreed(){
-      return this.pet.breedChoice === "mix"
+    mixBreed() {
+      return this.pet.breedChoice === "mix";
     },
-
   },
   methods: {
     submitForm() {
       if (this.mixBreed) {
-        let breeds = this.pet.breeds.split(',')
-        breeds.map((breed)=>{
-          breed.trim()
-        })
-        this.pet.breeds = breeds
+        let breeds = this.pet.breeds.split(",");
+        breeds.map((breed) => {
+          breed.trim();
+        });
+        this.pet.breeds = breeds;
       }
       console.log(this.pet);
     },
-    selectBreed(val){
-      this.breads.push(val)
+    selectBreed(val) {
+      this.breads.push(val);
     },
     setGender(gender) {
       this.pet.gender = gender;
@@ -182,38 +197,45 @@ export default {
 </script>
 
 <style scoped>
-.container{
+.container {
   box-shadow: #090909;
   padding: 10px 40px 40px 40px;
-  width: 30%;
+  width: 60%;
   background-color: white;
 }
-.default-color{
-  color: #00a0e5;
 
-}
-  .default-color:hover{
-    background-color: #00a0e5;
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
   }
-.btn-primary{
+}
+.text-default {
+  color: #00a0e5;
+}
+.default-color {
+  color: #00a0e5;
+}
+.default-color:hover {
+  background-color: #00a0e5;
+}
+.btn-primary {
   background-color: #00a0e5;
   color: white;
   border: none;
-
 }
-.btn-primary:hover{
+.btn-primary:hover {
   background-color: #00a0e5;
 }
 
-.btn-outline-primary{
+.btn-outline-primary {
   border: 1px solid #00a0e5;
 }
 
-.form-check-input{
+.form-check-input {
   background-color: #e0dfdf;
 }
 
-.form-check-input:checked{
+.form-check-input:checked {
   background-color: #00a0e5;
   border-color: #00a0e5;
 }

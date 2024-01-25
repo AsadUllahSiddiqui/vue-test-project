@@ -1,17 +1,16 @@
 <template>
-  <!-- <HeaderComp /> -->
+  <HeaderComp />
   <PetRegistrationForm />
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 import PetRegistrationForm from "./components/PetRegistrationForm.vue";
-// import HeaderComp from "./components/Header.vue";
+import HeaderComp from "./components/Header.vue";
 
 export default {
   name: "App",
   components: {
-    // HeaderComp,
+    HeaderComp,
     PetRegistrationForm,
   },
 };
@@ -27,7 +26,9 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #e0dfdf;
+  padding: 50px;
 }
+
 </style>
