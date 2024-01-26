@@ -2,7 +2,7 @@
   <div class="text-start pet-registration container my-5 card">
     <img src="../assets/paws.png" class="mb-3" />
 
-    <div v-if="showAlert" class="alert alert-success" role="alert">
+    <div v-if="showAlert" :class="['alert', alertClass]" role="alert">
       {{ alertMessage }}
     </div>
     <h4 class="mb-4 text-default">Tell us about your pet</h4>
@@ -131,7 +131,13 @@
 
       <!-- Submission button -->
       <div class="d-grid">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button
+          type="submit"
+          :disabled="isButtonDisabled"
+          class="btn btn-primary"
+        >
+          Save
+        </button>
       </div>
     </form>
   </div>
@@ -144,6 +150,8 @@ export default {
     return {
       showAlert: false,
       alertMessage: "",
+      alertType: "",
+      isButtonDisabled: false,
       pet: {
         name: "",
         type: "",
@@ -211,17 +219,17 @@ export default {
     mixBreed() {
       return this.pet.breedChoice === "mix";
     },
+    alertClass() {
+      return this.alertType === "error" ? "alert-danger" : "alert-success";
+    },
   },
   methods: {
     async registerPet() {
+      this.isButtonDisabled = true;
       try {
-        let breedData = this.pet.breed;
-        if (this.mixBreed) {
-          breedData = this.pet.breeds
-            .split(",")
-            .map((breed) => breed.trim())
-            .join(",");
-        }
+        const breedData = this.mixBreed
+          ? this.getProcessedBreeds()
+          : this.pet.breed;
 
         const postData = {
           name: this.pet.name,
@@ -230,15 +238,30 @@ export default {
           breed: breedData,
           no: 1,
         };
+
         const response = await SymphonyService.registerPet(postData);
-        this.alertMessage = `Success: ${response.data.message}`;
-        this.showAlert = true;
+        this.setAlert(`Success: ${response.data.message}`, true, "success");
       } catch (error) {
-        this.alertMessage = `Error: ${
-          error.response?.data?.message || error.message
-        }`;
-        this.showAlert = true;
+        this.isButtonDisabled = false;
+        this.setAlert(
+          `Error: ${error.response?.data?.message || error.message}`,
+          true,
+          "error"
+        );
       }
+    },
+
+    getProcessedBreeds() {
+      return this.pet.breeds
+        .split(",")
+        .map((breed) => breed.trim())
+        .join(",");
+    },
+
+    setAlert(message, isVisible, type) {
+      this.alertMessage = message;
+      this.showAlert = isVisible;
+      this.alertType = type; // set the alert type
     },
     selectBreed(val) {
       this.breads.push(val);
@@ -277,6 +300,12 @@ export default {
   color: white;
   border: none;
 }
+.btn-primary:disabled {
+  background-color: #00a0e5;
+  color: white;
+  border: none;
+}
+
 .btn-primary:hover {
   background-color: #00a0e5;
 }
