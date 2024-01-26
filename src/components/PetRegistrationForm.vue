@@ -154,21 +154,49 @@ export default {
         showBreedInput: false,
       },
       catBreeds: [
-        "Cat 1",
-        "Cat 2",
-        "Cat 3",
-        "Cat 4",
-        "Cat 5",
-        "Cat 6",
+        "Persian",
+        "Maine Coon",
+        "Siamese",
+        "Ragdoll",
+        "Bengal",
+        "British Shorthair",
+        "Sphynx",
+        "Scottish Fold",
+        "Birman",
+        "Abyssinian",
+        "Russian Blue",
+        "Norwegian Forest Cat",
+        "Oriental Shorthair",
+        "American Shorthair",
+        "Himalayan",
         "Can't find it?",
       ],
       dogBreeds: [
-        "Dog 1",
-        "Dog 2",
-        "Dog 3",
-        "Dog 4",
-        "Dog 5",
-        "Dog 6",
+        "Labrador Retriever",
+        "German Shepherd",
+        "Golden Retriever",
+        "French Bulldog",
+        "Bulldog",
+        "Beagle",
+        "Poodle",
+        "Rottweiler",
+        "Yorkshire Terrier",
+        "Boxer",
+        "Dachshund",
+        "Siberian Husky",
+        "Doberman Pinscher",
+        "Great Dane",
+        "Cavalier King Charles Spaniel",
+        "Shih Tzu",
+        "Boston Terrier",
+        "Pomeranian",
+        "Havanese",
+        "Shetland Sheepdog",
+        "Border Collie",
+        "Australian Shepherd",
+        "Cocker Spaniel",
+        "Chihuahua",
+        "Pembroke Welsh Corgi",
         "Can't find it?",
       ],
     };
@@ -187,44 +215,31 @@ export default {
   methods: {
     async registerPet() {
       try {
-        let breeds;
+        let breedData = this.pet.breed;
         if (this.mixBreed) {
-          breeds = this.pet.breeds.split(",");
-          breeds.map((breed) => {
-            breed.trim();
-          });
+          breedData = this.pet.breeds
+            .split(",")
+            .map((breed) => breed.trim())
+            .join(",");
         }
-        console.log(this.pet.breeds);
+
         const postData = {
           name: this.pet.name,
-          type: this.pet.type === "dog" ? 1 : 2,
-          gender: this.pet.gender === "male" ? 0 : 1,
-          breed: this.mixBreed ? this.pet.breeds : this.pet.breed,
+          type: this.pet.type === "dog" ? 1 : 0,
+          gender: this.pet.gender === "male" ? 1 : 0,
+          breed: breedData,
           no: 1,
         };
         const response = await SymphonyService.registerPet(postData);
         this.alertMessage = `Success: ${response.data.message}`;
         this.showAlert = true;
       } catch (error) {
-        this.alertMessage = `Error: ${error.message}`;
+        this.alertMessage = `Error: ${
+          error.response?.data?.message || error.message
+        }`;
         this.showAlert = true;
       }
     },
-
-    // submitForm() {
-    //   if (this.mixBreed) {
-    //     let breeds = this.pet.breeds.split(",");
-    //     breeds.map((breed) => {
-    //       breed.trim();
-    //     });
-    //   }
-    //   this.postData.name = this.pet.name;
-    //   this.postData.type = 1;
-    //   this.postData.gender = 0;
-    //   this.postData.breed = this.pet.name;
-    //   this.postData.no = 1;
-    //   console.log((this.jsonString = JSON.stringify(this.pet)));
-    // },
     selectBreed(val) {
       this.breads.push(val);
     },
