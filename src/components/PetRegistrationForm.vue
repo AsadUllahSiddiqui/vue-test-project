@@ -1,8 +1,12 @@
 <template>
   <div class="text-start pet-registration container my-5 card">
     <img src="../assets/paws.png" class="mb-3" />
+
+    <div v-if="showAlert" class="alert alert-success" role="alert">
+      {{ alertMessage }}
+    </div>
     <h4 class="mb-4 text-default">Tell us about your pet</h4>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="registerPet">
       <div class="mb-3">
         <label for="petName" class="form-label">What is your pet's name?</label>
         <input
@@ -134,12 +138,16 @@
 </template>
 
 <script>
+import SymphonyService from "@/services/SymphonyService";
 export default {
   data() {
     return {
+      showAlert: false,
+      alertMessage: "",
       pet: {
         name: "",
         type: "",
+        breed: "",
         breedChoice: "",
         gender: "",
         breeds: [],
@@ -177,16 +185,46 @@ export default {
     },
   },
   methods: {
-    submitForm() {
-      if (this.mixBreed) {
-        let breeds = this.pet.breeds.split(",");
-        breeds.map((breed) => {
-          breed.trim();
-        });
-        this.pet.breeds = breeds;
+    async registerPet() {
+      try {
+        let breeds;
+        if (this.mixBreed) {
+          breeds = this.pet.breeds.split(",");
+          breeds.map((breed) => {
+            breed.trim();
+          });
+        }
+        console.log(this.pet.breeds);
+        const postData = {
+          name: this.pet.name,
+          type: this.pet.type === "dog" ? 1 : 2,
+          gender: this.pet.gender === "male" ? 0 : 1,
+          breed: this.mixBreed ? this.pet.breeds : this.pet.breed,
+          no: 1,
+        };
+        const response = await SymphonyService.registerPet(postData);
+        this.alertMessage = `Success: ${response.data.message}`;
+        this.showAlert = true;
+      } catch (error) {
+        this.alertMessage = `Error: ${error.message}`;
+        this.showAlert = true;
       }
-      console.log(this.pet);
     },
+
+    // submitForm() {
+    //   if (this.mixBreed) {
+    //     let breeds = this.pet.breeds.split(",");
+    //     breeds.map((breed) => {
+    //       breed.trim();
+    //     });
+    //   }
+    //   this.postData.name = this.pet.name;
+    //   this.postData.type = 1;
+    //   this.postData.gender = 0;
+    //   this.postData.breed = this.pet.name;
+    //   this.postData.no = 1;
+    //   console.log((this.jsonString = JSON.stringify(this.pet)));
+    // },
     selectBreed(val) {
       this.breads.push(val);
     },
